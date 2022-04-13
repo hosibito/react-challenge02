@@ -1,12 +1,18 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
+
+export const isDarkAtom = atom({
+    key:"isDark",
+    default: true,
+});
 
 export interface Categorie {
     text: string;
+    index: number;
 }
 
 export const categoryState = atom<Categorie[]>({
     key:"categorys",
-    default:[ { text : "Todo"} , {text: "선택"} , {text:"Done"} ],
+    default:[ { text : "Todo" , index:0} , {text: "선택", index:1} , {text:"Done", index:2} ],
     effects: [
         ({ setSelf, onSet }) => {
             const todoStoreKey = "categorys";
@@ -26,15 +32,10 @@ export const categoryState = atom<Categorie[]>({
     ],
 });
 
-export const selectedCategory = atom<Categorie>({
-    key:"selectedCategory",
-    default: { text : "Todo"},
-});
-
 
 export interface IToDo {
     text: string;
-    id: number;
+    index: number;
     category: Categorie;
 } 
   
@@ -60,15 +61,5 @@ export const toDoState = atom<IToDo[]>({
     ],
 });
 
-export const toDoSelector = selector({
-    key: "toDoSelector",
-    get: ({ get }) => {
-      const toDos = get(toDoState);
-      const currentCategory = get(selectedCategory);  
-
-      return toDos.filter(  (toDo) => toDo.category.text == currentCategory.text  );
-   
-    },
-});
 
 
